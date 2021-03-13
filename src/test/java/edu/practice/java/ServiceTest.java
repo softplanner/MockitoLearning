@@ -5,9 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 public class ServiceTest {
@@ -16,7 +15,7 @@ public class ServiceTest {
     Database mockDatabase;
 
     @Test
-    void testQuery(){
+    public void testQuery(){
 
         assertNotNull(mockDatabase);
         when(mockDatabase.isAvailable()).thenReturn(true);
@@ -24,5 +23,15 @@ public class ServiceTest {
         Service testService = new Service(mockDatabase);
         boolean check = testService.query("* from testService");
         assertTrue(check);
+    }
+
+    @Test
+    public void ensureMockitoReturnsTheConfiguredValue(){
+
+        // define return value for method getUniqueId()
+        when(mockDatabase.getUniqueId()).thenReturn(42);
+
+        Service testService = new Service(mockDatabase);
+        assertEquals("Using database with id: 42", testService.toString());
     }
 }
